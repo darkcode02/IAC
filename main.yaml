@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: '2010-09-09'  # Versión del formato de plantilla de AWS
+
+Parameters:
+  mykeypair: 
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Nombre del par de claves para acceder a la instancia
+  InstanceTypeParameter:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - m1.small
+      - m1.large
+    Description: Enter t2.micro, m1.small, or m1.large. Default is t2.micro.
+  SecurityGroupIP:
+    Type: String
+    Default: 0.0.0.0/0
+    Description: Introduce la IP para hacer whitelist en nuestro SG
+  VolumeSize:
+    Type: Number
+    Default: 20
+    Description: Tamaño del volumen EBS en GB
+  VolumeType:
+    Type: String
+    Default: gp3
+    AllowedValues:
+      - gp2
+      - gp3
+      - io1
+    Description: Tipo de volumen EBS (gp2, gp3, io1)
+  SSHFromIP:
+    Type: String
+    Default: 0.0.0.0/0
+    Description: La IP desde la que se permiten conexiones SSH
+  HTTPFromIP:
+    Type: String
+    Default: 0.0.0.0/0
+    Description: La IP desde la que se permiten conexiones HTTP
+  HTTPSFromIP:
+    Type: String
+    Default: 0.0.0.0/0
+    Description: La IP desde la que se permiten conexiones HTTPS
+
+Resources:  # Define los recursos que se van a crear en la plantilla
+  MyInstance:  # Nombre lógico del recurso de la instancia EC2
+    Type: AWS::EC2::Instance  # Tipo de recurso, en este caso unau instancia EC2
+    Properties:  # Propiedades del recurso 
+      ImageId: ami-0648742c7600c103f  # ID de la imagen AMI para la instancia
+      InstanceType: !Ref InstanceTypeParameter # Tipo de instancia
+      KeyName: !Ref mykeypair  # Nombre del par de claves para acceder a la instancia
+      BlockDeviceMappings:  # Mapeo de dispositivos de bloque
+        - DeviceName: "/dev/sdm"  # Nombre del dispositivo en la instancia
+          Ebs:  # Configuración del volumen EBS
+            VolumeType: !Ref VolumeType  # Tipo de volumen EBS
+            DeleteOnTermination: "true"  # Eliminar el volumen al terminar la instancia
+            VolumeSize: !Ref VolumeSize  # Tamaño del volumen en GB
+      SecurityGroupIds:  # Grupos de seguridad asociados a la instancia
+        - !Ref ServerSecurityWeb  # Referencia al ID del grupo de seguridad ServerSecurityWeb
+        - !Ref ServerSecurityPrivate  # Referencia al ID del grupo de seguridad ServerSecurityPrivate
+
+  ServerSecurityWeb:  # Nombre lógico del recurso del grupo de seguridad
+    Type: AWS::EC2::SecurityGroup  # Tipo de recurso, en este caso un grupo de seguridad EC2
+    Properties:  # Propiedades del recurso
+      GroupDescription: Allow connections from specified public sites  # Descripción del grupo de seguridad
+      SecurityGroupIngress:  # Reglas de ingreso del grupo de seguridad
+        - IpProtocol: tcp  # Protocolo IP
+          FromPort: 80  # Puerto de inicio del rango
+          ToPort: 80  # Puerto final del rango
+          CidrIp: !Ref HTTPFromIP  # Permitir tráfico desde la dirección IP especificada
+        - IpProtocol: tcp  # Protocolo IP
+          FromPort: 443  # Puerto de inicio del rango
+          ToPort: 443  # Puerto final del rango
+          CidrIp: !Ref HTTPSFromIP  # Permitir tráfico desde la dirección IP especificada
+
+  ServerSecurityPrivate:  # Nombre lógico del recurso del grupo de seguridad
+    Type: AWS::EC2::SecurityGroup  # Tipo de recurso, en este caso un grupo de seguridad EC2
+    Properties:  # Propiedades del recurso
+      GroupDescription: Allow connections from specified local sites  # Descripción del grupo de seguridad
+      SecurityGroupIngress:  # Reglas de ingreso del grupo de seguridad
+        - IpProtocol: tcp  # Protocolo IP
+          FromPort: 22  # Puerto de inicio del rango
+          ToPort: 22  # Puerto final del rango
+          CidrIp: !Ref SSHFromIP  # Permitir tráfico desde la dirección IP especificada
