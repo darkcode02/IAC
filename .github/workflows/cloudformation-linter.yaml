@@ -16,4 +16,4 @@ jobs:
       - name: print the cloud formation linter version & run lister
         run: |
           cfn-lint --version
-          cfn-lint -t ./template.yaml
+          cfn-lint -t ./main.yaml
