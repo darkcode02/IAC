@@ -37,43 +37,43 @@ Parameters:
     Default: 0.0.0.0/0
     Description: La IP desde la que se permiten conexiones HTTPS
 
-Resources:  # Define los recursos que se van a crear en la plantilla
-  MyInstance:  # Nombre lógico del recurso de la instancia EC2
-    Type: AWS::EC2::Instance  # Tipo de recurso, en este caso unau instancia EC2
-    Properties:  # Propiedades del recurso 
-      ImageId: ami-0648742c7600c103f  # ID de la imagen AMI para la instancia
-      InstanceType: !Ref InstanceTypeParameter # Tipo de instancia
-      KeyName: !Ref mykeypair  # Nombre del par de claves para acceder a la instancia
-      BlockDeviceMappings:  # Mapeo de dispositivos de bloque
-        - DeviceName: "/dev/sdm"  # Nombre del dispositivo en la instancia
-          Ebs:  # Configuración del volumen EBS
-            VolumeType: !Ref VolumeType  # Tipo de volumen EBS
-            DeleteOnTermination: "true"  # Eliminar el volumen al terminar la instancia
-            VolumeSize: !Ref VolumeSize  # Tamaño del volumen en GB
-      SecurityGroupIds:  # Grupos de seguridad asociados a la instancia
-        - !Ref ServerSecurityWeb  # Referencia al ID del grupo de seguridad ServerSecurityWeb
-        - !Ref ServerSecurityPrivate  # Referencia al ID del grupo de seguridad ServerSecurityPrivate
+Resources:
+  MyInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0648742c7600c103f
+      InstanceType: !Ref InstanceTypeParameter
+      KeyName: !Ref mykeypair
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sdm"
+          Ebs:
+            VolumeType: !Ref VolumeType
+            DeleteOnTermination: true
+            VolumeSize: !Ref VolumeSize
+      SecurityGroupIds:
+        - !Ref ServerSecurityWeb
+        - !Ref ServerSecurityPrivate
 
-  ServerSecurityWeb:  # Nombre lógico del recurso del grupo de seguridad
-    Type: AWS::EC2::SecurityGroup  # Tipo de recurso, en este caso un grupo de seguridad EC2
-    Properties:  # Propiedades del recurso
-      GroupDescription: Allow connections from specified public sites  # Descripción del grupo de seguridad
-      SecurityGroupIngress:  # Reglas de ingreso del grupo de seguridad
-        - IpProtocol: tcp  # Protocolo IP
-          FromPort: 80  # Puerto de inicio del rango
-          ToPort: 80  # Puerto final del rango
-          CidrIp: !Ref HTTPFromIP  # Permitir tráfico desde la dirección IP especificada
-        - IpProtocol: tcp  # Protocolo IP
-          FromPort: 443  # Puerto de inicio del rango
-          ToPort: 443  # Puerto final del rango
-          CidrIp: !Ref HTTPSFromIP  # Permitir tráfico desde la dirección IP especificada
+  ServerSecurityWeb:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow connections from specified public sites
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Ref HTTPFromIP
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !Ref HTTPSFromIP
 
-  ServerSecurityPrivate:  # Nombre lógico del recurso del grupo de seguridad
-    Type: AWS::EC2::SecurityGroup  # Tipo de recurso, en este caso un grupo de seguridad EC2
-    Properties:  # Propiedades del recurso
-      GroupDescription: Allow connections from specified local sites  # Descripción del grupo de seguridad
-      SecurityGroupIngress:  # Reglas de ingreso del grupo de seguridad
-        - IpProtocol: tcp  # Protocolo IP
-          FromPort: 22  # Puerto de inicio del rango
-          ToPort: 22  # Puerto final del rango
-          CidrIp: !Ref SSHFromIP  # Permitir tráfiico desde la dirección IP especificada
+  ServerSecurityPrivate:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow connections from specified local sites
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref SSHFromIP

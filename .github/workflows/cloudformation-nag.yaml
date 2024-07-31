@@ -1,33 +1,46 @@
-name: CloudFormation nag 
+name: CloudFormation nag
 
-run-name: CloudFormation nag for yaml 
+run-name: CloudFormation nag and linter for yaml
 
-
-# on: [pull-request, push] tambien se puede hacer de esta manera, pero preferimos especificar la rama
-
+# Activación del workflow en push y pull request a la rama main
 on: 
-    push:
-      branches:
-        - main  #rama principal
-    pull_request:
-      branches:
-        - main #activacion de workflow cada que se haga un PR a main
-
+  push:
+    branches:
+      - main  # rama principal
+  pull_request:
+    branches:
+      - main  # activación de workflow cada que se haga un PR a main
 
 jobs: 
-    cloudformation-nag:
-        runs-on: ubuntu-latest 
+  cloudformation-nag:
+    runs-on: ubuntu-latest 
 
-        steps:
-            - uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-            - run: |
-                eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-                brew install ruby brew-gem 
-                brew gem install cfn-nag 
-            
-            - run: |
-                eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-                cfn_nag_scan --input-path template.yaml
-  
+      - name: Set up Homebrew and install cfn-nag
+        run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          brew install ruby brew-gem
+          brew gem install cfn-nag 
 
+      - name: Run cfn-nag
+        run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          cfn_nag_scan --input-path template.yaml
+
+  cloudformation-linter:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup CloudFormation linter with latest version
+        uses: scottbrenner/cfn-lint-action@v2
+
+      - name: Print the CloudFormation linter version & run linter
+        run: |
+          cfn-lint --version
+          cfn-lint -t ./template.yaml
