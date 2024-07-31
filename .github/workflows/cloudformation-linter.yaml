@@ -1,6 +1,12 @@
-name: Lint CloudFormation Templates
+name: Lint CloudFormation Templates 
 
-on: [push]
+on: 
+  push:
+    branches:
+      - main  
+  pull_request:
+    branches:
+      - main
 
 jobs:
   cloudformation-linter:
@@ -13,7 +19,7 @@ jobs:
       - name: Setup cloud formation linter with latest version
         uses: scottbrenner/cfn-lint-action@v2
 
-      - name: print the cloud formation linter version & run lister
+      - name: Print the CloudFormation linter version & run linter
         run: |
           cfn-lint --version
           cfn-lint -t ./main.yaml
