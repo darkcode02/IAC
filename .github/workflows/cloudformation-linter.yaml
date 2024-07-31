@@ -1,6 +1,7 @@
 name: Lint CloudFormation Templates 
+run-name: CloudFormation lint yaml
 
-on: 
+on:
   push:
     branches:
       - main  #rama principal
