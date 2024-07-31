@@ -1,0 +1,27 @@
+name: CloudFormation nag 
+
+run-name: CloudFormation nag for yaml 
+
+
+# on: [pull-request, push] tambien se puede hacer de esta manera, pero preferimos especificar la rama
+
+on: 
+    push:
+      branches:
+        - main  #rama principal
+    pull_request:
+      branches:
+        - main #activacion de workflow cada que se haga un PR a main
+
+
+jobs: 
+    cloudformation-nag:
+        runs-on: ubuntu-latest 
+
+        steps:
+            - uses: actions/checkout@v3
+            - run: echo "Hola mi nombre es juan pablo"
+            
+
+  
+
