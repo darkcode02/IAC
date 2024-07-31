@@ -3,10 +3,10 @@ name: Lint CloudFormation Templates
 on: 
   push:
     branches:
-      - main  
+      - main  #rama principal
   pull_request:
     branches:
-      - main
+      - main #activacion de workflow cada que se haga un PR a main
 
 jobs:
   cloudformation-linter:
