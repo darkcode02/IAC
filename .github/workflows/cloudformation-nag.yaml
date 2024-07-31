@@ -23,7 +23,7 @@ jobs:
             - run: |
                 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
                 brew install ruby brew-gem 
-                brew gem instal cfn-nag 
+                brew gem install cfn-nag 
 
   
 
