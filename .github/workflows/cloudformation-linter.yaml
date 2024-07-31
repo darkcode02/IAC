@@ -1,25 +1,25 @@
-name: Lint CloudFormation Templates 
+name: Lint CloudFormation Templates  # Nombre del workflow
 
 on: 
-  push:
+  push:  # El workflow se activará cuando haya un push
     branches:
-      - main  #rama principal
-  pull_request:
+      - main  # Solo se activará para la rama principal llamada 'main'
+  pull_request:  # El workflow se activará cuando haya una pull request
     branches:
-      - main #activacion de workflow cada que se haga un PR a main
+      - main  # Solo se activará para PRs dirigidas a la rama 'main'
 
 jobs:
-  cloudformation-linter:
-    runs-on: ubuntu-latest
+  cloudformation-linter:  # Nombre del job
+    runs-on: ubuntu-latest  # El job se ejecutará en un runner con Ubuntu más reciente
     
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    steps:  # Pasos a ejecutar dentro del job
+      - name: Checkout  # Nombre del paso
+        uses: actions/checkout@v3  # Acción para chequear el código del repositorio
 
-      - name: Setup cloud formation linter with latest version
-        uses: scottbrenner/cfn-lint-action@v2
+      - name: Setup cloud formation linter with latest version  # Nombre del paso
+        uses: scottbrenner/cfn-lint-action@v2  # Acción para configurar el linter de CloudFormation con la versión más reciente
 
-      - name: Print the CloudFormation linter version & run linter
-        run: |
-          cfn-lint --version
-          cfn-lint -t ./main.yaml
+      - name: Print the CloudFormation linter version & run linter  # Nombre del paso
+        run: |  # Ejecuta los siguientes comandos en el runner
+          cfn-lint --version  # Imprime la versión del linter de CloudFormation
+          cfn-lint -t ./main.yaml  # Ejecuta el linter en el archivo 'main.yaml'
