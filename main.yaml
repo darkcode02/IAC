@@ -12,10 +12,6 @@ Parameters:
       - m1.small
       - m1.large
     Description: Enter t2.micro, m1.small, or m1.large. Default is t2.micro.
-  SecurityGroupIP:
-    Type: String
-    Default: 0.0.0.0/0
-    Description: Introduce la IP para hacer whitelist en nuestro SG
   VolumeSize:
     Type: Number
     Default: 20
