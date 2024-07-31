@@ -80,4 +80,4 @@ Resources:  # Define los recursos que se van a crear en la plantilla
         - IpProtocol: tcp  # Protocolo IP
           FromPort: 22  # Puerto de inicio del rango
           ToPort: 22  # Puerto final del rango
-          CidrIp: !Ref SSHFromIP  # Permitir tráfico desde la dirección IP especificada
+          CidrIp: !Ref SSHFromIP  # Permitir tráfiico desde la dirección IP especificada
