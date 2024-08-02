@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'  # Versión del formato de plantilla de AWS
+AWSTemplateFormatVersion: '2010-09-09'
 
 Parameters:
   mykeypair: 
@@ -26,15 +26,15 @@ Parameters:
     Description: Tipo de volumen EBS (gp2, gp3, io1)
   SSHFromIP:
     Type: String
-    Default: 0.0.0.0/0
+    Default: 186.121.35.177/32  # IP pública conocida con máscara /32 para una sola IP
     Description: La IP desde la que se permiten conexiones SSH
   HTTPFromIP:
     Type: String
-    Default: 0.0.0.0/0
+    Default: 186.121.35.177/32  # IP pública conocida con máscara /32 para una sola IP
     Description: La IP desde la que se permiten conexiones HTTP
   HTTPSFromIP:
     Type: String
-    Default: 0.0.0.0/0
+    Default: 186.121.35.177/32  # IP pública conocida con máscara /32 para una sola IP
     Description: La IP desde la que se permiten conexiones HTTPS
 
 Resources:
