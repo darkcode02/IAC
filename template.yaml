@@ -57,23 +57,38 @@ Resources:
   ServerSecurityWeb:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Allow connections from specified public sites
+      GroupDescription: Allow HTTP and HTTPS connections from a specific IP
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: !Ref HTTPFromIP
+          Description: Allow HTTP from specific IP
         - IpProtocol: tcp
           FromPort: 443
           ToPort: 443
           CidrIp: !Ref HTTPSFromIP
+          Description: Allow HTTPS from specific IP
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic
 
   ServerSecurityPrivate:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Allow connections from specified local sites
+      GroupDescription: Allow SSH connections from a specific IP
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
           CidrIp: !Ref SSHFromIP
+          Description: Allow SSH from specific IP
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic
