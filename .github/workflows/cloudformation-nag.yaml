@@ -44,3 +44,4 @@ jobs:
         run: |
           cfn-lint --version
           cfn-lint -t ./template.yaml
+  
